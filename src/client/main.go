@@ -20,6 +20,7 @@ package main
 
 import (
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"time"
@@ -36,7 +37,7 @@ const (
 
 func main() {
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithMaxMsgSize(1024*1024*8))
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -71,4 +72,20 @@ func main() {
 		log.Println(res.Message)
 	}
 	log.Printf("Greeting: %s", r.Message)
+
+	log.Println("Start to sending file.")
+
+	img, err := ioutil.ReadFile("big.jpg")
+	if err != nil {
+		log.Printf("failed to read image file: %v", err)
+		return
+	}
+
+	fileResponse, err := c.FileProcess(ctx, &pb.FileRequest{Image: img})
+	if err != nil {
+		log.Printf("failed to send image file: %v", err)
+		return
+	}
+
+	log.Println("File grpc works, result=", fileResponse.GetResult())
 }

@@ -19,10 +19,12 @@ type server struct{}
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	log.Println("Start to SayHello")
 	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
 }
 
 func (s *server) SayStreamHello(in *pb.HelloRequest, stream pb.Greeter_SayStreamHelloServer) error {
+	log.Println("Start to SayStreamHello")
 	respones := []string{"hello", "good", "morning"}
 	for _, res := range respones {
 		stream.Send(&pb.HelloReply{Message: res + in.Name})
@@ -32,8 +34,9 @@ func (s *server) SayStreamHello(in *pb.HelloRequest, stream pb.Greeter_SayStream
 }
 
 func (s *server) FileProcess(ctx context.Context, in *pb.FileRequest) (*pb.FileReply, error) {
-
-	return nil, nil
+	log.Println("Start to receive file...")
+	log.Println("Totoal size:", len(in.GetImage()))
+	return &pb.FileReply{Image: in.GetImage(), Result: "Succeed"}, nil
 }
 
 func main() {
@@ -42,7 +45,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-	s := grpc.NewServer()
+
+	opts := []grpc.ServerOption{
+		grpc.MaxMsgSize(1024 * 1024 * 8),
+	}
+	s := grpc.NewServer(opts...)
 	pb.RegisterGreeterServer(s, srv)
 	s.Serve(c)
 }
