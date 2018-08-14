@@ -7,13 +7,7 @@ pb: $(PROTO_TARGETS)
 	protoc $< --go_out=plugins=grpc:.
 	go test ./$(dir $<)
 
-cmd/%: pb src/$@
-	go build -i $(GO_BUILD_FLAGS) ./src/$@
+src/%: pb src/$@
+	go build -i $(GO_BUILD_FLAGS) ./$@
 
-# cmds: $(CMD_TARGETS)
-
-debug:
-	@echo $(CMD_TARGETS)
-
-CMD_PKGS := $(wildcard src/*)
-CMD_TARGETS := $(subst src/,,$(CMD_PKGS))
+all: pb src/client src/server

@@ -31,6 +31,11 @@ func (s *server) SayStreamHello(in *pb.HelloRequest, stream pb.Greeter_SayStream
 	return nil
 }
 
+func (s *server) FileProcess(ctx context.Context, in *pb.FileRequest) (*pb.FileReply, error) {
+
+	return nil, nil
+}
+
 func main() {
 	srv := new(server)
 	c, err := net.Listen("tcp", port)
