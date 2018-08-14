@@ -16,4 +16,4 @@
 
 # Learning detail:
 
-- Refer blog post here.
+- Refer blog post here.  (WIP)
