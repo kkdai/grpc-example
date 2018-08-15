@@ -25,7 +25,8 @@ package helloworld;
 service Greeter {
   // Sends a greeting
   rpc SayHello (HelloRequest) returns (HelloReply) {}
-  rpc SayStreamHello (HelloRequest) returns (stream HelloReply) {}
+  rpc SayHelloStreamServer (HelloRequest) returns (stream HelloReply) {}
+  rpc SayHelloStreamClient (stream HelloRequest) returns (HelloReply) {}
   rpc FileProcess(FileRequest) returns (FileReply) {}
 }
 

@@ -7,7 +7,8 @@ pb: $(PROTO_TARGETS)
 	protoc $< --go_out=plugins=grpc:.
 	go test ./$(dir $<)
 
-src/%: pb src/$@
-	go build -i $(GO_BUILD_FLAGS) ./$@
+build:
+	go build ./src/server
+	go build ./src/client
 
-all: pb src/client src/server
+all: pb build

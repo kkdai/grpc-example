@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"io"
 	"log"
 	"net"
 	"time"
@@ -11,7 +12,7 @@ import (
 )
 
 const (
-	port = ":50051"
+	port = ":50058"
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -23,14 +24,31 @@ func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloRe
 	return &pb.HelloReply{Message: "Hello " + in.Name}, nil
 }
 
-func (s *server) SayStreamHello(in *pb.HelloRequest, stream pb.Greeter_SayStreamHelloServer) error {
-	log.Println("Start to SayStreamHello")
+func (s *server) SayHelloStreamServer(in *pb.HelloRequest, stream pb.Greeter_SayHelloStreamServerServer) error {
+	log.Println("Start to SayHellpStreamServer")
 	respones := []string{"hello", "good", "morning"}
 	for _, res := range respones {
 		stream.Send(&pb.HelloReply{Message: res + in.Name})
 		time.Sleep(2 * time.Second)
 	}
 	return nil
+}
+
+func (s *server) SayHelloStreamClient(stream pb.Greeter_SayHelloStreamClientServer) error {
+	var totalNames string
+	for {
+		res, err := stream.Recv()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		log.Println(res.GetName())
+		totalNames = totalNames + " " + res.GetName()
+	}
+
+	return stream.SendMsg(pb.HelloReply{Message: "Hi " + totalNames})
 }
 
 func (s *server) FileProcess(ctx context.Context, in *pb.FileRequest) (*pb.FileReply, error) {
@@ -51,5 +69,6 @@ func main() {
 	}
 	s := grpc.NewServer(opts...)
 	pb.RegisterGreeterServer(s, srv)
+	log.Println("Server starting...")
 	s.Serve(c)
 }

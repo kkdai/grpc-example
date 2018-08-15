@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	address     = "localhost:50051"
+	address     = "localhost:50058"
 	defaultName = "world"
 )
 
@@ -49,6 +49,7 @@ func main() {
 	if len(os.Args) > 1 {
 		name = os.Args[1]
 	}
+	log.Println("call SayHello")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	r, err := c.SayHello(ctx, &pb.HelloRequest{Name: name})
@@ -57,7 +58,8 @@ func main() {
 	}
 	log.Printf("Greeting: %s", r.Message)
 
-	stream, err := c.SayStreamHello(ctx, &pb.HelloRequest{Name: name})
+	log.Println("call SayHelloStreamServer")
+	stream, err := c.SayHelloStreamServer(ctx, &pb.HelloRequest{Name: name})
 	if err != nil {
 		log.Fatalf("could not greet: %v", err)
 	}
