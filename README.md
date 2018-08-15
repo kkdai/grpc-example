@@ -1,4 +1,9 @@
-# GRPC Example and survey
+# GRPC Examples and Survey
+
+This repo include a GRPC example in Go, which target two major functionalities.
+
+- Streaming request and streaming response refer `SayStreamHello`
+- Large message size (original one is 4MB, enlarge to 8MB) `MaxMsgSize`
 
 ## How to build it
 
