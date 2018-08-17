@@ -19,6 +19,20 @@ This repo include a GRPC example in Go, which target two major functionalities.
 2. Run server-side `./server`
 3. Start another terminal and run client `./client`
 
-# Learning detail:
+## Docker run
 
-- Refer blog post here.  (WIP)
+### Run GRPC Server in docker
+
+`docker run -it --net=host kkdai/grpc-example /go/bin/server`
+
+### Run GRPC Client in docker
+
+`docker run -it -net=host kkdai/grpc-example /go/bin/client`
+
+# Note:
+
+If you want to build this docker your own, make sure you have a file which name `big.jpg`.
+
+# Learn more detail:
+
+- Refer blog post [here](http://www.evanlin.com/go-grpc-service/).  
