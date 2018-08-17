@@ -48,7 +48,7 @@ func (s *server) SayHelloStreamClient(stream pb.Greeter_SayHelloStreamClientServ
 		totalNames = totalNames + " " + res.GetName()
 	}
 
-	return stream.SendMsg(pb.HelloReply{Message: "Hi " + totalNames})
+	return stream.SendMsg(&pb.HelloReply{Message: "Hi " + totalNames})
 }
 
 func (s *server) FileProcess(ctx context.Context, in *pb.FileRequest) (*pb.FileReply, error) {

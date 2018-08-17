@@ -73,10 +73,21 @@ func main() {
 		}
 		log.Println(res.Message)
 	}
-	log.Printf("Greeting: %s", r.Message)
+	log.Println("Start streaming client")
+
+	requestSlice := []string{"a", "b"}
+	streamC, errC := c.SayHelloStreamClient(ctx)
+	if errC != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+
+	for _, req := range requestSlice {
+		streamC.Send(&pb.HelloRequest{Name: req})
+	}
+	resp, err := streamC.CloseAndRecv()
+	log.Println("Streaming client result:", resp.GetMessage())
 
 	log.Println("Start to sending file.")
-
 	img, err := ioutil.ReadFile("big.jpg")
 	if err != nil {
 		log.Printf("failed to read image file: %v", err)
