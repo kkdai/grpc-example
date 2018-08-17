@@ -1,0 +1,24 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grpc-example
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: grpc-example
+    spec:
+      containers:
+      - name: grpc-example
+        image: kkdai/grpc-example:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: BIND_PORT
+          value: "50052"
+        - name: BIND_IP
+          value: "0.0.0.0"
+        ports:
+        - containerPort: 50052
+        command: [ "/go/bin/server"]
