@@ -11,6 +11,7 @@ RUN apk add --no-cache tzdata && \
     echo $TIMEZONE > /etc/timezone && \
     apk del tzdata
 COPY . /go/src/github.com/kkdai/grpc-example/
+COPY big.jpg /go/bin/
 RUN go install ./src/...
 
 # the final image
@@ -19,3 +20,4 @@ RUN apk add --no-cache ca-certificates rsync shadow bash
 
 # copy the go binaries from the build image
 COPY --from=0 /go/bin /go/bin
+WORKDIR /go/bin
