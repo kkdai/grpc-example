@@ -1,8 +1,9 @@
-# GRPC Examples and Survey
+# GRPC Examples 
 
-This repo include a GRPC example in Go, which target two major functionalities.
+This repository include a GRPC example in Go, which target three major functionalities.
 
 - Streaming request and streaming response refer `SayStreamHello`
+- GRPC request timeout 
 - Large message size (original one is 4MB, enlarge to 8MB) `MaxMsgSize`
 
 ## How to build it
@@ -28,6 +29,14 @@ This repo include a GRPC example in Go, which target two major functionalities.
 ### Run GRPC Client in docker
 
 `docker run -it -net=host kkdai/grpc-example /go/bin/client`
+
+## Deploy on Kubernetes
+
+- Connect to your Kubernetes API server
+- `kubectl apply -f kubernetes/deployment.yaml`
+- `kubectl apply -f kubernetes/service.yaml`
+
+You can connect to this GRPC server via any go client with "grpc-example.default" address in your Kubernetes.
 
 # Note:
 
